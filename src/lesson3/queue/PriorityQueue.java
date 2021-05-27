@@ -55,4 +55,9 @@ public class PriorityQueue<E extends Comparable<? super E>> implements Queue<E> 
     public boolean isFull() {
         return size == data.length;
     }
+
+    @Override
+    public void display() {
+
+    }
 }

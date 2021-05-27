@@ -14,7 +14,7 @@ public class QueueImpl<E> implements Queue<E> {
     @SuppressWarnings("unchecked")
     public QueueImpl(int maxSize) {
         this.data = (E[]) new Object[maxSize];
-        this.head = HEAD_DEFAULT;
+        this.head = maxSize;
         this.tail = TAIL_DEFAULT;
     }
 
@@ -70,5 +70,24 @@ public class QueueImpl<E> implements Queue<E> {
     @Override
     public boolean isFull() {
         return size == data.length;
+    }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+        int sizeHead = size+head;
+        for (int i = head; i < sizeHead; i++) {
+            sb.append(data[i]);
+            if (i < sizeHead - 1) {
+                sb.append(", ");
+            }
+        }
+
+        sb.append("]");
+        return sb.toString();
+    }
+
+    @Override
+    public void display() {
+        System.out.println(this);
     }
 }
