@@ -17,8 +17,8 @@ public class Test3 {
 
     private static void testQueue() {
 //        Queue<Integer> queue = new QueueImpl<>(5);
-//        Queue<Integer> queue = new PriorityQueue<>(5);
-        Queue<Integer> queue = new LinkedQueueImpl<>();
+        Queue<Integer> queue = new PriorityQueue<>(5);
+//        Queue<Integer> queue = new LinkedQueueImpl<>();
         System.out.println(queue.insert(3));
         System.out.println(queue.insert(5));
         System.out.println(queue.insert(1));
@@ -36,8 +36,8 @@ public class Test3 {
     }
 
     private static void testStack() {
-//        Stack<Integer> stack = new StackImpl<>(5);
-        Stack<Integer> stack = new LinkedStackImpl<>();
+        Stack<Integer> stack = new StackImpl<>(5);
+//        Stack<Integer> stack = new LinkedStackImpl<>();
         System.out.println("Add value 1: " + addToStack(stack, 1));
         System.out.println("Add value 2: " + addToStack(stack, 2));
         System.out.println("Add value 3: " + addToStack(stack, 3));
