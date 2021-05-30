@@ -1,35 +1,22 @@
 package lesson3.deque;
 
-public class DequeImpl<E> implements Deque<E> {
+import lesson3.queue.QueueImpl;
 
-    private static final int HEAD_DEFAULT = -1;
-    private static final int TAIL_DEFAULT = -1;
+public class DequeImpl<E> extends QueueImpl<E> implements Deque<E> {
 
-    private final E[] data;
-    private int size;
-
-    private int tail;
-    private int head;
-
-    @SuppressWarnings("unchecked")
     public DequeImpl(int maxSize) {
-        this.data = (E[]) new Object[maxSize];
-        this.tail = TAIL_DEFAULT;
-        this.head = data.length - 1;
-//        this.head = HEAD_DEFAULT;
+        super(maxSize);
     }
 
     @Override
     public boolean addLeft(E value) {
-        if (isFull()) {
+        if (isFull()){
             return false;
         }
-
-//        if (head == -1) {
-//            head = data.length - 1;
-//        }
-
-        data[head--] = value;
+        if (head == HEAD_DEFAULT){
+            head = data.length;
+        }
+        data[--head] = value;
         size++;
 
         return true;
@@ -37,112 +24,35 @@ public class DequeImpl<E> implements Deque<E> {
 
     @Override
     public boolean addRight(E value) {
-        // Проверку на null не делал
-        if (isFull()) {
-            return false;
-        }
-
-//        if (tail == data.length - 1) {
-//            tail = TAIL_DEFAULT;
-//        }
-        data[++tail] = value;
-        size++;
-
-        return true;
+        return super.insert(value);
     }
 
     @Override
     public E removeLeft() {
-        if (isEmpty())
-            return null;
-
-        if (head == data.length) {
-            head = HEAD_DEFAULT;
-        }
-        E value = data[++head];
-        data[head] = null;
-        size--;
-        if (size == 0) {
-            tail = TAIL_DEFAULT;
-            head = HEAD_DEFAULT;
-        }
-        return value;
+        return super.remove();
     }
 
     @Override
     public E removeRight() {
-        if (isEmpty())
+        if (isEmpty()){
             return null;
-
+        }
+        if (tail == TAIL_DEFAULT){
+            tail = data.length - 1;
+        }
+        size--;
         E value = data[tail];
         data[tail--] = null;
-        size--;
-        if (size == 0) {
-            tail = TAIL_DEFAULT;
-            head = HEAD_DEFAULT;
-        }
         return value;
     }
 
     @Override
     public E getLeft() {
-        return data[head + 1];
+        return data[head];
     }
 
     @Override
     public E getRight() {
         return data[tail];
-    }
-
-
-    /*   Queue methods   */
-    @Override
-    public boolean insert(E value) {
-        return addRight(value);
-    }
-
-    @Override
-    public E remove() {
-        return removeRight();
-    }
-
-    @Override
-    public E peekFront() {
-        return getRight();
-    }
-
-    @Override
-    public int size() {
-        return size;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    @Override
-    public boolean isFull() {
-        return size == data.length;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("[");
-
-        for (E datum : data) {
-            if (datum != null) {
-                sb.append(datum);
-                sb.append(", ");
-            }
-        }
-        sb.setLength(sb.length() - 2);
-
-        sb.append("]");
-        return sb.toString();
-    }
-
-    public void display() {
-        System.out.println(this);
     }
 }

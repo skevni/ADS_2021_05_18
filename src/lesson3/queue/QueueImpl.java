@@ -2,14 +2,14 @@ package lesson3.queue;
 
 public class QueueImpl<E> implements Queue<E> {
 
-    private static final int HEAD_DEFAULT = 0;
-    private static final int TAIL_DEFAULT = -1;
+    protected static final int HEAD_DEFAULT = 0;
+    protected static final int TAIL_DEFAULT = -1;
 
-    private final E[] data;
-    private int size;
+    protected final E[] data;
+    protected int size;
 
-    private int tail;
-    private int head;
+    protected int tail;
+    protected int head;
 
     @SuppressWarnings("unchecked")
     public QueueImpl(int maxSize) {
@@ -46,7 +46,8 @@ public class QueueImpl<E> implements Queue<E> {
             head = HEAD_DEFAULT;
         }
 
-        E value = data[head++];
+        E value = data[head];
+        data[head++] = null;
         size--;
 
         return value;
@@ -74,14 +75,12 @@ public class QueueImpl<E> implements Queue<E> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("[");
-        int sizeHead = size+head;
-        for (int i = head; i < sizeHead; i++) {
-            sb.append(data[i]);
-            if (i < sizeHead - 1) {
-                sb.append(", ");
+        for (E datum : data) {
+            if (datum != null) {
+                sb.append(datum).append(", ");
             }
         }
-
+        sb.setLength(sb.length() - 2);
         sb.append("]");
         return sb.toString();
     }
