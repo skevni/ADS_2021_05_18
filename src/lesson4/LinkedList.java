@@ -21,9 +21,16 @@ public interface LinkedList<E> extends Iterable<E> {
     class Node<E> {
         E item;
         Node<E> next;
+        Node<E> previous;
 
         public Node(E item, Node<E> next) {
             this.item = item;
+            this.next = next;
+        }
+
+        public Node(E item, Node<E> previous, Node<E> next) {
+            this.item = item;
+            this.previous = previous;
             this.next = next;
         }
     }

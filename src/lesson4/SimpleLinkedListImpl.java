@@ -111,6 +111,22 @@ public class SimpleLinkedListImpl<E> implements LinkedList<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new Iterator<>() {
+            int index = 0;
+            Node<E> currentNode = firstElement;
+
+            @Override
+            public boolean hasNext() {
+                return index != size();
+            }
+
+            @Override
+            public E next() {
+                E curValue = getValue(currentNode);
+                currentNode = currentNode.next;
+                index++;
+                return curValue;
+            }
+        };
     }
 }
