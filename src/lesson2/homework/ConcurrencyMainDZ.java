@@ -77,7 +77,7 @@ public class ConcurrencyMainDZ {
             long finishTime = System.nanoTime();
             long duration = finishTime - startTime;
 
-            System.out.printf("%s took time: %d micros.%n", actionName, TimeUnit.NANOSECONDS.toMicros(duration));
+            System.out.printf("%s took time: %d micros.%n", actionName, TimeUnit.NANOSECONDS.toMillis(duration));
         };
     }
 
