@@ -83,10 +83,14 @@ public class TwoSideLinkedListImpl<E> extends SimpleLinkedListImpl<E> implements
             firstElement = null;
         }
         Node<E> tmpPrev = lastElement;
-        lastElement = tmpPrev.previous;
-        lastElement.next = null;
-        // next у последнего нет, обрываем предыдущую ссылку
-        tmpPrev.previous = null;
+        if (size == 1){
+            lastElement = null;
+        } else {
+            lastElement = tmpPrev.previous;
+            lastElement.next = null;
+            // next у последнего нет, обрываем предыдущую ссылку
+            tmpPrev.previous = null;
+        }
         size--;
         return tmpPrev.item;
     }
