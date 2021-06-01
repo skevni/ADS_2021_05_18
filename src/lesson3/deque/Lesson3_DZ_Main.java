@@ -3,6 +3,7 @@ package lesson3.deque;
 
 import lesson3.stack.Stack;
 import lesson3.stack.StackImpl;
+import lesson4.LinkedDequeImpl;
 
 public class Lesson3_DZ_Main {
     public static void main(String[] args) {
@@ -27,7 +28,8 @@ public class Lesson3_DZ_Main {
 
 
         //TASK 2
-        Deque<Integer> deq = new DequeImpl<>(6);
+//        Deque<Integer> deq = new DequeImpl<>(6);
+        Deque<Integer> deq = new LinkedDequeImpl<>();
 
         insertRight(deq, 1);
         insertRight(deq, 2);
@@ -39,8 +41,8 @@ public class Lesson3_DZ_Main {
         removeLeft(deq); //5 1 2 3 4
         removeRight(deq); // 5 1 2 3
 
-//        displayLeftToRight(deq); // Queue
-        displayRightToLeft(deq); //Stack
+        displayLeftToRight(deq); // Queue
+//        displayRightToLeft(deq); //Stack
     }
 
     private static <E> void insertRight(Deque<E> deq, E value) {
