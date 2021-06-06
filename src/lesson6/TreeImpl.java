@@ -7,23 +7,29 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
     private class NodeAndParent {
         private Node<E> current;
         private Node<E> parent;
+        private int depth;
 
-        public NodeAndParent(Node<E> current, Node<E> parent) {
+        public NodeAndParent(Node<E> current, Node<E> parent, int depth) {
             this.current = current;
             this.parent = parent;
+            this.depth = depth;
         }
     }
 
     private int size;
     private Node<E> root;
+    private int depth;
 
+    public TreeImpl(int depth) {
+        this.depth = depth;
+    }
 
     @Override
     public boolean add(E value) {
         Node<E> node = new Node<>(value);
 
         NodeAndParent nodeAndParent = doFind(value);
-        if (nodeAndParent.current != null) {
+        if (nodeAndParent.current != null || nodeAndParent.depth > this.depth) {
             return false;
         }
 
@@ -49,10 +55,11 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
     private NodeAndParent doFind(E value) {
         Node<E> current = root;
         Node<E> previous = null;
+        int indexDepth = 1;
 
         while (current != null) {
             if (current.getValue().equals(value)) {
-                return new NodeAndParent(current, previous);
+                return new NodeAndParent(current, previous, indexDepth);
             }
 
             previous = current;
@@ -61,9 +68,10 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
             } else {
                 current = current.getRightChild();
             }
+            indexDepth++;
         }
 
-        return new NodeAndParent(null, previous);
+        return new NodeAndParent(null, previous, indexDepth);
     }
 
     @Override
@@ -240,5 +248,20 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
             nBlanks /= 2;
         }
         System.out.println("................................................................");
+    }
+
+    public Node<E> getRoot() {
+        return root;
+    }
+
+    public boolean isBalanced(Node<E> node) {
+        return (node == null) ||
+                isBalanced(node.getLeftChild()) &&
+                        isBalanced(node.getRightChild()) &&
+                        Math.abs(height(node.getLeftChild()) - height(node.getRightChild())) <= 1;
+    }
+
+    private int height(Node<E> node) {
+        return node == null ? 0 : 1 + Math.max(height(node.getLeftChild()), height(node.getRightChild()));
     }
 }
