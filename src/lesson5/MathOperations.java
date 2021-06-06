@@ -2,7 +2,7 @@ package lesson5;
 
 public class MathOperations {
     /*  Метод умеет возводить в целую степень положительные и отрицательные числа
-     *   дробные степени не понял пока что как сделать
+     *   Не реализовано: дробные степени не понял пока что как сделать
      */
     public static double power(int num, double power) {
         if (num < 0 && power < 1 && power > -1)
