@@ -6,16 +6,31 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
 
     private class NodeAndParent {
         private Node<E> current;
+        private int currentLevel;
         private Node<E> parent;
 
         public NodeAndParent(Node<E> current, Node<E> parent) {
+            this(current, parent, 0);
+        }
+
+        public NodeAndParent(Node<E> current, Node<E> previous, int currentLevel) {
             this.current = current;
-            this.parent = parent;
+            this.currentLevel = currentLevel;
+            this.parent = previous;
         }
     }
 
     private int size;
     private Node<E> root;
+    private final int maxLevel;
+
+    public TreeImpl() {
+        this(0);
+    }
+
+    public TreeImpl(int maxLevel) {
+        this.maxLevel = maxLevel;
+    }
 
 
     @Override
@@ -28,6 +43,11 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
         }
 
         Node<E> previous = nodeAndParent.parent;
+        int level = nodeAndParent.currentLevel;
+        if (level > maxLevel && maxLevel > 0) {
+            return false;
+        }
+
         if (previous == null) {
             root = node;
         } else if (previous.isLeftChild(value)) {
@@ -49,6 +69,7 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
     private NodeAndParent doFind(E value) {
         Node<E> current = root;
         Node<E> previous = null;
+        int level = 1;
 
         while (current != null) {
             if (current.getValue().equals(value)) {
@@ -61,9 +82,10 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
             } else {
                 current = current.getRightChild();
             }
+            level++;
         }
 
-        return new NodeAndParent(null, previous);
+        return new NodeAndParent(null, previous, level);
     }
 
     @Override
@@ -240,5 +262,21 @@ public class TreeImpl<E extends Comparable<? super E>> implements Tree<E> {
             nBlanks /= 2;
         }
         System.out.println("................................................................");
+    }
+
+    @Override
+    public boolean isBalanced() {
+        return isBalanced(root);
+    }
+
+    private boolean isBalanced(Node<E> node) {
+        return (node == null) ||
+                isBalanced(node.getLeftChild()) &&
+                        isBalanced(node.getRightChild()) &&
+                        Math.abs(height(node.getLeftChild()) - height(node.getRightChild())) <= 1;
+    }
+
+    private int height(Node<E> node) {
+        return node == null ? 0 : 1 + Math.max(height(node.getLeftChild()), height(node.getRightChild()));
     }
 }
