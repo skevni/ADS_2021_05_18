@@ -20,4 +20,5 @@ public interface Graph {
      */
     void bfs(String startLabel);
 
+    String bfsShortWay(String startLabel, String endLabel);
 }

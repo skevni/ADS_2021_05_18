@@ -114,7 +114,8 @@ public class GraphImpl implements Graph {
     }
 
     private void visitVertex(Queue<Vertex> queue, Vertex vertex) {
-        System.out.println(vertex.getLabel());
+//        System.out.println(vertex.getLabel());
+        vertex.setPrevious(queue.peek());
         queue.add(vertex);
         vertex.setVisited(true);
     }
@@ -140,5 +141,50 @@ public class GraphImpl implements Graph {
         }
 
         resetVertexState();
+    }
+
+    public String bfsShortWay(String startLabel, String endLabel) {
+        int startIndex = indexOf(startLabel);
+        if (startIndex == -1) {
+            throw new IllegalArgumentException("Invalid start label: " + startLabel);
+        }
+
+        Queue<Vertex> queue = new LinkedList<>();
+        Vertex vertex = vertexList.get(startIndex);
+
+        visitVertex(queue, vertex);
+        while (!queue.isEmpty()) {
+            vertex = getNearUnvisitedVertex(queue.peek());
+            if (vertex != null) {
+                visitVertex(queue, vertex);
+                if (vertex.getLabel().equals(endLabel)) {
+                    break;
+                }
+            } else {
+                queue.remove();
+            }
+        }
+
+        if (vertex == null)
+            return "Нет маршрутов между городами";
+
+        Stack<Vertex> tmp = new Stack<>();
+        tmp.add(vertex);
+
+        Vertex prev = vertex.getPrevious();
+
+        while (prev != null) {
+            tmp.push(prev);
+            prev = prev.getPrevious();
+        }
+        StringBuilder sb = new StringBuilder();
+        while (!tmp.isEmpty()){
+            sb.append(tmp.pop().getLabel()).append(" -> ");
+        }
+        sb.setLength(sb.length() - 4);
+
+        resetVertexState();
+
+        return  sb.toString();
     }
 }
