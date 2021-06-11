@@ -94,6 +94,7 @@ public class GraphImpl implements Graph {
     private void resetVertexState() {
         for (Vertex vertex : vertexList) {
             vertex.setVisited(false);
+            vertex.setPreviousVertex(null);
         }
     }
 
@@ -140,5 +141,51 @@ public class GraphImpl implements Graph {
         }
 
         resetVertexState();
+    }
+
+    @Override
+    public Stack<String> findShortPathViaBfs(String startLabel, String finishLabel) {
+        Stack<String> path = new Stack<>();
+
+        int startIndex = indexOf(startLabel);
+        int finishIndex = indexOf(finishLabel);
+        if (startIndex == -1) {
+            throw new IllegalArgumentException("Invalid startLabel: " + startLabel);
+        }
+        if (finishIndex == -1) {
+            throw new IllegalArgumentException("Invalid finishLabel: " + finishLabel);
+        }
+
+        Queue<Vertex> queue = new ArrayDeque<>();
+
+        Vertex vertex = vertexList.get(startIndex);
+        visitVertex(queue, vertex);
+
+        while (!queue.isEmpty()) {
+            vertex = getNearUnvisitedVertex(queue.peek());
+            if (vertex == null) {
+                queue.remove();
+            } else {
+                visitVertex(queue, vertex);
+                vertex.setPreviousVertex(queue.peek());
+                if (vertex.getLabel().equals(finishLabel)) {
+                    path = buildPath(vertex);
+                }
+            }
+        }
+
+        resetVertexState();
+        return path;
+    }
+
+    private Stack<String> buildPath(Vertex vertex) {
+        Stack<String> stack = new Stack<>();
+        Vertex current = vertex;
+        while (current != null) {
+            stack.push(current.getLabel());
+            current = current.getPreviousVertex();
+        }
+
+        return stack;
     }
 }
